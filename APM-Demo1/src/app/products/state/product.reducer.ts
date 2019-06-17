@@ -1,13 +1,21 @@
-export function reducer(state, action) {
-  switch (action.type) {
+import { initialState, ProductState } from './product.state';
+import { ProductAction } from './product.actions';
 
-    case 'TOGGLE_PRODUCT_CODE':
-      return {
-        ...state,
-        showProductCode: action.payload
-      };
+export function reducer(state = initialState, action: ProductAction): ProductState {
+  //   switch (action.type) {
+  //     case 'TOGGLE_PRODUCT_CODE':
+  //       return {
+  //         ...state,
+  //         showProductCode: action.payload
+  //       };
 
-    default:
-      return state;
+  //     default:
+  //       return state;
+  //   }
+
+  if (action.execute) {
+    return action.execute(state);
   }
+
+  return state;
 }
