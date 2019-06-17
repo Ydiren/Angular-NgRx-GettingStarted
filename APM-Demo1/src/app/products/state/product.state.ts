@@ -7,12 +7,14 @@ export interface State extends fromRoot.State {
 
 export interface ProductState {
   showProductCode: boolean;
-  currentProduct: Product;
+  currentProductId: number | null;
   products: Product[];
+  error: string;
 }
 
 export const initialState: ProductState = {
-  currentProduct: null,
+  currentProductId: null,
   showProductCode: true,
-  products: []
+  products: [],
+  error: ''
 };

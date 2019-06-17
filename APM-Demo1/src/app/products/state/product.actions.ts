@@ -9,7 +9,10 @@ export enum ProductActionTypes {
   InitializeCurrentProduct = '[Product] Initialize Current Product',
   Load = '[Product] Load',
   LoadSuccess = '[Product] Load Success',
-  LoadFail = '[Product] Load Fail'
+  LoadFail = '[Product] Load Fail',
+  UpdateProduct = '[Product] Update Product',
+  UpdateProductSuccess = '[Product] Update Product Success',
+  UpdateProductFail = '[Product] Update Product Fail'
 }
 
 export abstract class ProductAction implements Action {
@@ -42,7 +45,7 @@ export class SetCurrentProduct extends ProductAction {
   execute(state: ProductState): ProductState {
     return {
       ...state,
-      currentProduct: { ...this.payload }
+      currentProductId: this.payload.id
     };
   }
 }
@@ -53,7 +56,7 @@ export class ClearCurrentProduct extends ProductAction {
   execute(state: ProductState): ProductState {
     return {
       ...state,
-      currentProduct: null
+      currentProductId: null
     };
   }
 }
@@ -64,13 +67,7 @@ export class InitializeCurrentProduct extends ProductAction {
   execute(state: ProductState): ProductState {
     return {
       ...state,
-      currentProduct: {
-        id: 0,
-        productName: '',
-        productCode: 'New',
-        description: '',
-        starRating: 0
-      } as Product
+      currentProductId: 0
     };
   }
 }
@@ -93,7 +90,8 @@ export class LoadSuccess extends ProductAction {
   execute(state: ProductState): ProductState {
     return {
       ...state,
-      products: this.payload
+      products: this.payload,
+      error: ''
     };
   }
 }
@@ -106,6 +104,57 @@ export class LoadFail extends ProductAction {
   }
 
   execute(state: ProductState): ProductState {
+    return {
+      ...state,
+      products: [],
+      error: this.payload
+    };
+  }
+}
+
+export class UpdateProduct extends ProductAction {
+  readonly type = ProductActionTypes.UpdateProduct;
+
+  constructor(public payload: Product) {
+    super();
+  }
+
+  execute(state: ProductState) {
     return state;
+  }
+}
+
+export class UpdateProductSuccess extends ProductAction {
+  readonly type = ProductActionTypes.UpdateProductSuccess;
+
+  constructor(public payload: Product) {
+    super();
+  }
+
+  execute(state: ProductState) {
+    const updatedProducts = state.products.map(item =>
+      this.payload.id === item.id ? this.payload : item
+    );
+    return {
+      ...state,
+      products: updatedProducts,
+      currentProductId: this.payload.id,
+      error: ''
+    };
+  }
+}
+
+export class UpdateProductFail extends ProductAction {
+  readonly type = ProductActionTypes.UpdateProductFail;
+
+  constructor(public payload: string) {
+    super();
+  }
+
+  execute(state: ProductState) {
+    return {
+      ...state,
+      error: this.payload
+    };
   }
 }
