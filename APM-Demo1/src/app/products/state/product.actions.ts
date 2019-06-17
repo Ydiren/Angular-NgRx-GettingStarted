@@ -12,7 +12,13 @@ export enum ProductActionTypes {
   LoadFail = '[Product] Load Fail',
   UpdateProduct = '[Product] Update Product',
   UpdateProductSuccess = '[Product] Update Product Success',
-  UpdateProductFail = '[Product] Update Product Fail'
+  UpdateProductFail = '[Product] Update Product Fail',
+  CreateProduct = '[Product] Create Product',
+  CreateProductSuccess = '[Product] Create Product Success',
+  CreateProductFail = '[Product] Create Product Fail',
+  DeleteProduct = '[Product] Delete Product',
+  DeleteProductSuccess = '[Product] Delete Product Success',
+  DeleteProductFail = '[Product] Delete Product Fail'
 }
 
 export abstract class ProductAction implements Action {
@@ -152,6 +158,94 @@ export class UpdateProductFail extends ProductAction {
   }
 
   execute(state: ProductState) {
+    return {
+      ...state,
+      error: this.payload
+    };
+  }
+}
+
+export class CreateProduct extends ProductAction {
+  readonly type = ProductActionTypes.CreateProduct;
+
+  constructor(public payload: Product) {
+    super();
+  }
+
+  execute(state: ProductState): ProductState {
+    return state;
+  }
+}
+
+export class CreateProductSuccess extends ProductAction {
+  readonly type = ProductActionTypes.CreateProductSuccess;
+
+  constructor(public payload: Product) {
+    super();
+  }
+
+  execute(state: ProductState): ProductState {
+    return {
+      ...state,
+      currentProductId: this.payload.id,
+      products: [...state.products, this.payload]
+    };
+  }
+}
+
+export class CreateProductFail extends ProductAction {
+  readonly type = ProductActionTypes.CreateProductFail;
+
+  constructor(public payload: string) {
+    super();
+  }
+
+  execute(state: ProductState): ProductState {
+    return {
+      ...state,
+      error: this.payload
+    };
+  }
+}
+
+export class DeleteProduct extends ProductAction {
+  readonly type = ProductActionTypes.DeleteProduct;
+
+  constructor(public payload: number) {
+    super();
+  }
+
+  execute(state: ProductState): ProductState {
+    return {
+      ...state
+    };
+  }
+}
+
+export class DeleteProductSuccess extends ProductAction {
+  readonly type = ProductActionTypes.DeleteProductSuccess;
+
+  constructor(public payload: number) {
+    super();
+  }
+
+  execute(state: ProductState): ProductState {
+    return {
+      ...state,
+      currentProductId: null,
+      products: state.products.filter(p => p.id !== this.payload)
+    };
+  }
+}
+
+export class DeleteProductFail extends ProductAction {
+  readonly type = ProductActionTypes.DeleteProductFail;
+
+  constructor(public payload: string) {
+    super();
+  }
+
+  execute(state: ProductState): ProductState {
     return {
       ...state,
       error: this.payload
