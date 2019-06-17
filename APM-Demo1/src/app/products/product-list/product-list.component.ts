@@ -35,12 +35,16 @@ export class ProductListComponent implements OnInit, OnDestroy {
       .pipe(select(productSelectors.getCurrentProduct))
       .subscribe(currentProduct => (this.selectedProduct = currentProduct));
 
-    this.productService
-      .getProducts()
-      .subscribe(
-        (products: Product[]) => (this.products = products),
-        (err: any) => (this.errorMessage = err.error)
-      );
+    // this.productService
+    //   .getProducts()
+    //   .subscribe(
+    //     (products: Product[]) => (this.products = products),
+    //     (err: any) => (this.errorMessage = err.error)
+    //   );
+    this.store.dispatch(new productAction.Load());
+    this.store
+      .pipe(select(productSelectors.getProducts))
+      .subscribe((products: Product[]) => (this.products = products));
 
     // TODO: Unsubscribe
     this.store

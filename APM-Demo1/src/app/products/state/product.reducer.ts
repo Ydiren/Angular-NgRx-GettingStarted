@@ -1,7 +1,10 @@
 import { initialState, ProductState } from './product.state';
-import { ProductAction } from './product.actions';
+import { ProductAction, ProductActionTypes } from './product.actions';
 
-export function reducer(state = initialState, action: ProductAction): ProductState {
+export function reducer(
+  state = initialState,
+  action: ProductAction
+): ProductState {
   //   switch (action.type) {
   //     case 'TOGGLE_PRODUCT_CODE':
   //       return {
@@ -13,7 +16,9 @@ export function reducer(state = initialState, action: ProductAction): ProductSta
   //       return state;
   //   }
 
-  if (action.execute) {
+  if (action instanceof ProductAction) {
+    console.log('Action Type', action);
+
     return action.execute(state);
   }
 

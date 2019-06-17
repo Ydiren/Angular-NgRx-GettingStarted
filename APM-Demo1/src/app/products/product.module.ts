@@ -10,16 +10,17 @@ import { ProductEditComponent } from './product-edit/product-edit.component';
 /* NgRx */
 import { StoreModule } from '@ngrx/store';
 import { reducer } from './state/product.reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { ProductEffects } from './state/product.effects';
 
-const productRoutes: Routes = [
-  { path: '', component: ProductShellComponent }
-];
+const productRoutes: Routes = [{ path: '', component: ProductShellComponent }];
 
 @NgModule({
   imports: [
     SharedModule,
     RouterModule.forChild(productRoutes),
-    StoreModule.forFeature('products', reducer)
+    StoreModule.forFeature('products', reducer),
+    EffectsModule.forFeature([ProductEffects])
   ],
   declarations: [
     ProductShellComponent,
@@ -27,4 +28,4 @@ const productRoutes: Routes = [
     ProductEditComponent
   ]
 })
-export class ProductModule { }
+export class ProductModule {}

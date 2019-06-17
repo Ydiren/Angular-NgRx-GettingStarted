@@ -1,5 +1,5 @@
 import * as fromUser from '../state/user.state';
-import { UserAction } from './user.actions';
+import { UserAction, UserActionTypes } from './user.actions';
 
 export function reducer(state = fromUser.initialState, action: UserAction) {
   //   switch (action.type) {
@@ -12,7 +12,9 @@ export function reducer(state = fromUser.initialState, action: UserAction) {
   //     default:
   //       return state;
   //   }
-  if (action.execute) {
+  if (action instanceof UserAction) {
+    console.log('user action type', action);
+
     return action.execute(state);
   }
 

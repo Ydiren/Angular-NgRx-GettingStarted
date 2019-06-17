@@ -12,13 +12,17 @@ export enum ProductActionTypes {
   LoadFail = '[Product] Load Fail'
 }
 
-export interface ProductAction extends Action {
-  execute(state: ProductState): ProductState;
+export abstract class ProductAction implements Action {
+  type: string;
+  abstract execute(state: ProductState): ProductState;
 }
-export class ToggleProductCode implements ProductAction {
+
+export class ToggleProductCode extends ProductAction {
   readonly type = ProductActionTypes.ToggleProductCode;
 
-  constructor(public payload: boolean) {}
+  constructor(public payload: boolean) {
+    super();
+  }
 
   execute(state: ProductState) {
     return {
@@ -28,10 +32,12 @@ export class ToggleProductCode implements ProductAction {
   }
 }
 
-export class SetCurrentProduct implements ProductAction {
+export class SetCurrentProduct extends ProductAction {
   readonly type = ProductActionTypes.SetCurrentProduct;
 
-  constructor(public payload: Product) {}
+  constructor(public payload: Product) {
+    super();
+  }
 
   execute(state: ProductState): ProductState {
     return {
@@ -41,7 +47,7 @@ export class SetCurrentProduct implements ProductAction {
   }
 }
 
-export class ClearCurrentProduct implements ProductAction {
+export class ClearCurrentProduct extends ProductAction {
   readonly type = ProductActionTypes.ClearCurrentProduct;
 
   execute(state: ProductState): ProductState {
@@ -52,7 +58,7 @@ export class ClearCurrentProduct implements ProductAction {
   }
 }
 
-export class InitializeCurrentProduct implements ProductAction {
+export class InitializeCurrentProduct extends ProductAction {
   readonly type = ProductActionTypes.InitializeCurrentProduct;
 
   execute(state: ProductState): ProductState {
@@ -69,7 +75,7 @@ export class InitializeCurrentProduct implements ProductAction {
   }
 }
 
-export class Load implements ProductAction {
+export class Load extends ProductAction {
   readonly type = ProductActionTypes.Load;
 
   execute(state: ProductState): ProductState {
@@ -77,20 +83,27 @@ export class Load implements ProductAction {
   }
 }
 
-export class LoadSuccess implements ProductAction {
+export class LoadSuccess extends ProductAction {
   readonly type = ProductActionTypes.LoadSuccess;
 
-  constructor(public payload: Product[]) {}
+  constructor(public payload: Product[]) {
+    super();
+  }
 
   execute(state: ProductState): ProductState {
-    return state;
+    return {
+      ...state,
+      products: this.payload
+    };
   }
 }
 
-export class LoadFail implements ProductAction {
+export class LoadFail extends ProductAction {
   readonly type = ProductActionTypes.LoadFail;
 
-  constructor(public payload: string) {}
+  constructor(public payload: string) {
+    super();
+  }
 
   execute(state: ProductState): ProductState {
     return state;

@@ -5,14 +5,17 @@ export enum UserActionTypes {
   MaskUserName = '[User] Mask User Name'
 }
 
-export interface UserAction extends Action {
-  execute(state: UserState): UserState;
+export abstract class UserAction implements Action {
+  abstract type: string;
+  abstract execute(state: UserState): UserState;
 }
 
-export class MaskUserName implements UserAction {
+export class MaskUserName extends UserAction {
   readonly type = UserActionTypes.MaskUserName;
 
-  constructor(public payload: boolean) {}
+  constructor(public payload: boolean) {
+    super();
+  }
 
   execute(state: UserState) {
     return {
