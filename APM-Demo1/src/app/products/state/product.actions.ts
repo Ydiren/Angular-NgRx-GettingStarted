@@ -22,7 +22,7 @@ export enum ProductActionTypes {
 }
 
 export abstract class ProductAction implements Action {
-  type: string;
+  abstract readonly type: string;
   abstract execute(state: ProductState): ProductState;
 }
 

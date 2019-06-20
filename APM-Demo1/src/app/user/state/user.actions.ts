@@ -6,7 +6,7 @@ export enum UserActionTypes {
 }
 
 export abstract class UserAction implements Action {
-  abstract type: string;
+  abstract readonly type: string;
   abstract execute(state: UserState): UserState;
 }
 
